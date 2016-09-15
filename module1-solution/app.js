@@ -26,7 +26,7 @@ function LunchCheckController ($scope) {
 
     if (numDish == 0)
     {
-      return "";
+      return "Please enter data first";
     }
     else if (numDish <=3)
     {
