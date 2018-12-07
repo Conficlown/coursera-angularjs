@@ -1,1 +1,25 @@
 <div class="loader"></div>
+<div class="">
+    <br>
+    <br>
+    <br>
+    <br>
+    <ul>
+        <div class="row menu-list" ng-repeat="item in menu.found">
+            <li >
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    {{item.name}}
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3">
+                    {{item.short_name}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4">
+                    {{item.description}}
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <button class="btn btn-danger" ng-click="onRemove({index : $index});">Don't want this one!</button>
+                </div>
+            </li>
+        </div>
+    </ul>
+</div>
