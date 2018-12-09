@@ -10,14 +10,26 @@ angular.module('NarrowItDownApp', [])
 NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController(MenuSearchService) {
     var AppController = this;
-    AppController.filterName = "";
+    AppController.notFound = false;
     AppController.found = [];
-    AppController.narrowDown = function () {
-        if ( AppController.filterName !== "" ) {
-            MenuSearchService.getMatchedMenuItems(AppController.filterName);
-            AppController.found = MenuSearchService.getFoundItems();
+
+    AppController.updateIsNoteFound = function () {
+        if (AppController.found.length) {
+            return false;
+        }else {
+            return true;
         }
-    };
+    }
+
+    AppController.narrowDown = function () {
+        if ( AppController.filterName !== "" && AppController.filterName !== undefined ) {
+            var promise = MenuSearchService.getMatchedMenuItems(AppController.filterName);
+            promise.then(function (response) {
+                AppController.found = MenuSearchService.getFoundItems();
+                AppController.notFound = AppController.updateIsNoteFound();
+            });
+        }
+    }
 
     AppController.removeMenu = function (index) {
         MenuSearchService.removeMenu(index);
@@ -40,6 +52,7 @@ MenuSearchService.$inject = ['$http', 'ApiBasePath'];
 function MenuSearchService($http, ApiBasePath) {
   var service = this;
   var foundItems = [];
+  var notFound = true;
 
   service.getMatchedMenuItems = function (searchTerm) {
     var response = $http({
@@ -53,6 +66,7 @@ function MenuSearchService($http, ApiBasePath) {
         for ( var i in result.data.menu_items) {
             if ( result.data.menu_items[i].description.toLowerCase().indexOf( searchTerm.trim().toLowerCase() ) !== -1 ) {
                 foundItems.push(result.data.menu_items[i]);
+                notFound = false;
             }
         }
     },
@@ -66,6 +80,10 @@ function MenuSearchService($http, ApiBasePath) {
 
   service.getFoundItems = function () {
       return foundItems;
+  }
+
+  service.isNotFound = function () {
+      return notFound;
   }
 
   service.removeMenu = function (index) {
