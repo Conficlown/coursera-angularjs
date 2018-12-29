@@ -1,0 +1,9 @@
+<div class="">
+    <ul>
+        <li ng-repeat="category in categories.menuCategories">
+        <a ui-sref="items({categoryShortName : category.short_name, category : category.name})" category="{{category}}">{{category.name}}</a>
+        </li>
+    </ul>
+    <!-- {{ categories.menuCategories | json }} -->
+
+</div>
